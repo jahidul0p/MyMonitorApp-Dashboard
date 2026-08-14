@@ -65,17 +65,9 @@ export default function CommandCenter() {
             <span>📱 Connected Devices <span className="bg-cyan-900/30 text-cyan-300 px-2 py-0.5 rounded text-xs ml-2">1 Online</span></span>
             <span className="text-gray-500 text-sm">🔄</span>
           </h3>
-          <div className="flex items-center justify-between bg-[#1f2937] p-3 rounded-lg text-xs">
-            <div className="flex flex-col gap-0.5">
-              <span className="font-bold">CPH2577</span>
-              <span className="text-gray-500 text-[10px]">46fd6cc0ba0ac7</span>
-            </div>
-            <div className="text-center">
-              <span className="text-green-400">🔋 81%</span>
-            </div>
-            <div className="bg-red-900/30 px-3 py-1 rounded-full text-red-400 text-[10px]">● Offline</div>
-            <button className="bg-cyan-700 px-4 py-1.5 rounded-full text-[10px] hover:bg-cyan-600 transition">🚀 Uninstall</button>
-          </div>
+          <div className="text-center text-gray-500 text-sm py-4">
+  📱 এখনো কোনো ডিভাইস কানেক্ট করা হয়নি। APK ইন্সটল করে রান করুন।
+</div>
         </div>
       </div>
 
